@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>Taulukon <span id="eka"></span> läpikäyntiä</h1>
+    <h2>for- ja for...of-silmukoilla</h2>
+    <hr />
+    <h2>Alkiot ovat:</h2>
+    <p id="para"></p>
+    <script>
+      // Aloita ohjelma
+      window.onload = writeResults();
+
+      // Kirjoita tulokset
+      function writeResults() {
+
+        // HTML sisältö
+        let sisalto = "";
+
+        // Taulukon summa
+        let arraySum = (arr) => {
+          sisalto += `<br>Summa on: ` + arr.reduce(reducer);
+        };
+
+        // Array.prototype.reduce() palauttaa summan
+        let reducer = (accumulator, currentValue) => {
+          return accumulator + currentValue;
+        };
+
+        // Taulukon keskiarvo
+        let arrayAvg = (arr) => {
+          sisalto += `<br>Keskiarvo on ` + arr.reduce(reducer) / arr.length;
+        };
+
+        // Taulukon lukumäärä
+        let arrayCount = (arr) => {
+          sisalto += `<br>Lukumäärä on ` + arr.length;
+        };
+
+        // Tulosta taulukko
+        let printArray = (arr) => {
+          for (var i = 0; i < arr.length; i++) {
+            sisalto += `taulukko[` + i + `] = ` + arr[i] + `<br>`;
+          }
+        };
+
+        // Taulukon arvot
+        let arr = [11, 22, 33, 44];
+        document.getElementById("eka").innerHTML = "[" + arr + "]";
+
+        // Toteuta funktiot
+        printArray(arr);
+        arrayCount(arr);
+        arraySum(arr);
+        arrayAvg(arr);
+
+        // Näytä sisältö
+        document.getElementById("para").innerHTML = sisalto;
+      }
+    </script>
+  </body>
+</html>

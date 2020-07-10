@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+      integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+      integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+      integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+      crossorigin="anonymous"
+    ></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="mt-5" style="width: 20rem; margin: 0 auto;">
+      <h1>Vauhtilaskin</h1>
+      <form onsubmit="printPace(event)">
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-default"
+              >Tunnit</span
+            >
+          </div>
+          <input
+            min="0"
+            value="1"
+            max="8760"
+            id="tunnit"
+            type="number"
+            class="form-control"
+            aria-label="Sizing example input"
+            aria-describedby="inputGroup-sizing-default"
+            required
+          />
+        </div>
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-default"
+              >Minuutit</span
+            >
+          </div>
+          <input
+            min="0"
+            value="13"
+            max="59"
+            id="minuutit"
+            type="number"
+            class="form-control"
+            aria-label="Sizing example input"
+            aria-describedby="inputGroup-sizing-default"
+            required
+          />
+        </div>
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-default"
+              >Sekunnit</span
+            >
+          </div>
+          <input
+            min="0"
+            value="13"
+            max="59"
+            id="sekunnit"
+            type="number"
+            class="form-control"
+            aria-label="Sizing example input"
+            aria-describedby="inputGroup-sizing-default"
+            required
+          />
+        </div>
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-default"
+              >Kilometrit</span
+            >
+          </div>
+          <input
+            min="0"
+            max="6371"
+            value="20"
+            id="kilometrit"
+            type="number"
+            class="form-control"
+            aria-label="Sizing example input"
+            aria-describedby="inputGroup-sizing-default"
+            required
+          />
+        </div>
+        <button class="btn btn-primary" type="submit">Laske</button>
+        <div
+          id="alert"
+          class="alert alert-warning alert-dismissible mt-3"
+          role="alert"
+        >
+          <strong>Ja vauhtia oli</strong>
+          <hr />
+          <div id="kmhPace"></div>
+          <div id="minkmPace"></div>
+          <button
+            onclick="hide()"
+            type="button"
+            class="close"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      </form>
+    </div>
+    <script>
+      class Vauhtilaskin {
+        constructor(h, min, sec, km) {
+          this.h = h;
+          this.min = min;
+          this.sec = sec;
+          this.km = km;
+        }
+
+        calcKmhPace() {
+          // kmh-laskentaa
+          let tunnit =
+            parseInt(this.h) +
+            (parseInt(this.min) * 60 + parseInt(this.sec)) / 3600;
+          let kmh = this.km / tunnit;
+          return kmh.toFixed(2) + " km/h";
+        }
+
+        calcMinkmPace() {
+          // min.sec/km-laskentaa
+          let sekunnit =
+            parseInt(this.h) * 60 * 60 +
+            parseInt(this.min) * 60 +
+            parseInt(this.sec);
+          let sekunnitPerKm = sekunnit / this.km;
+          let minuutitPerKm = Math.floor(sekunnitPerKm / 60);
+          sekunnitPerKm = Math.round((sekunnitPerKm / 60 - minuutitPerKm) * 60);
+          if (minuutitPerKm + sekunnitPerKm > 0) {
+            return minuutitPerKm + " min " + sekunnitPerKm + "s /km";
+          } else {
+            return ">0s /km";
+          }
+        }
+
+        get kmhpace() {
+          return this.calcKmhPace();
+        }
+
+        get minkmpace() {
+          return this.calcMinkmPace();
+        }
+      }
+
+      function hide() {
+        document.getElementById("alert").style.display = "none";
+      }
+
+      function printPace(event) {
+        event.preventDefault();
+        document.getElementById("alert").style.display = "block";
+        let tunnit = document.getElementById("tunnit").value;
+        let minuutit = document.getElementById("minuutit").value;
+        let sekunnit = document.getElementById("sekunnit").value;
+        let kilometrit = document.getElementById("kilometrit").value;
+        const vauhti = new Vauhtilaskin(tunnit, minuutit, sekunnit, kilometrit);
+        document.getElementById("kmhPace").innerHTML = vauhti.kmhpace;
+        document.getElementById("minkmPace").innerHTML = vauhti.minkmpace;
+      }
+    </script>
+  </body>
+  <style>
+    .alert {
+      display: none;
+    }
+  </style>
+</html>

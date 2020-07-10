@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+      integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+      integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+      integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+      integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+      crossorigin="anonymous"
+    ></script>
+    <title>SimpleToDo</title>
+  </head>
+  <body>
+    <div class="jumbotron container mt-5">
+      <h1 class="display-4">Simple ToDo</h1>
+      <p class="lead">This is a simple ToDo list.</p>
+      <hr class="my-4" />
+      <form onsubmit="addTodo(event)">
+        <div class="form-group">
+          <label for="input">Add something to the list</label>
+          <input type="text" class="form-control" id="input" required />
+          <small id="inputHelp" class="form-text text-muted"
+            >This list will be cleared when you leave this site.</small
+          >
+        </div>
+        <button class="btn btn-primary btn-lg" type="submit">Add</button
+        ><button
+          class="btn btn-primary btn-lg ml-3"
+          type="button"
+          onclick="removeTodos()"
+        >
+          Clear list
+        </button>
+      </form>
+    </div>
+    <ul id="list" class="list-group container">
+    </ul>
+    <script>
+      // Add todo
+      function addTodo(event) {
+        event.preventDefault();
+        let ul = document.getElementById("list");
+        let li = document.createElement("li");
+        let input = document.getElementById("input").value;
+        let textNode = document.createTextNode(input);
+        li.classList.add("list-group-item", "limit");
+        li.appendChild(textNode);
+        let button = document.createElement("button");
+        button.addEventListener("click", (e) => {
+          e.target.parentElement.remove();
+        });
+        button.classList.add("btn", "btn-primary", "btn-sm", "right");
+        button.innerHTML = "remove";
+        document.getElementById("input").value = "";
+        li.appendChild(button);
+        ul.appendChild(li);
+      }
+
+      // Remove todos
+      function removeTodos() {
+        document.getElementById("list").innerHTML = "";
+      }
+    </script>
+  </body>
+  <style>
+    .right {
+      float: right;
+    }
+    .limit {
+      overflow-wrap: break-word;
+    }
+  </style>
+</html>
