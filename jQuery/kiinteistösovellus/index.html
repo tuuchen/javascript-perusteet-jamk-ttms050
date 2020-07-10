@@ -20,22 +20,14 @@
       integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
       crossorigin="anonymous"
     ></script>
-    <script defer src="T3.js"></script>
-    <link rel="stylesheet" href="T3.css" />
-    <title>Drag and drop</title>
+    <script src="index.js"></script>
+    <link rel="stylesheet" href="index.css" />
+    <title>jQuery kiinteistösovellus</title>
   </head>
   <body>
     <div class="container">
-      <div class="jumbotron mt-5 drop-area">
-        <h1 class="display-4">Drag and drop example</h1>
-        <p class="lead">Drag images into the rectangle</p>
-        <div
-          class="divToDrop"
-          id="divToDrop"
-          ondrop="drop(event)"
-          ondragover="allowDrop(event)"
-        ></div>
-      </div>
+      <h1 class="my-5 text-center">jQuery kiinteistösovellus</h1>
+      <div id="content"></div>
     </div>
   </body>
 </html>
