@@ -71,8 +71,8 @@ function addCar(chart, id) {
 }
 
 function nollaa(chart) {
-  chart.data.datasets[0].data[0] = 0;
-  chart.data.datasets[0].data[1] = 0;
-  chart.data.datasets[0].data[2] = 0;
+  for (var i = 0; i < chart.data.datasets[0].data.length; i++) {
+    chart.data.datasets[0].data[i] = 0;
+  }
   chart.update();
 }

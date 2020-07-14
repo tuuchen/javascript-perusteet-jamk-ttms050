@@ -1,0 +1,13 @@
+.box {
+  border: 1px dashed #aaa;
+  padding: 15px;
+}
+
+button {
+  background-color: #069;
+  border-radius: 5px;
+  color: #fff;
+  margin-bottom: 5px;
+  padding: 5px 15px;
+  border: none;
+}
