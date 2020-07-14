@@ -1,26 +1,26 @@
 const { useState, useEffect } = React;
 
-const Calculator = ({ luku1, luku2, tulos, handleFirst, handleSecond }) => {
+const Calculator = ({ num1, num2, result, handleFirst, handleSecond }) => {
   return (
     <div>
       <table>
         <tbody>
           <tr>
-            <td>Luku1:</td>
+            <td>Luku 1:</td>
             <td>
-              <input type="text" value={luku1} onChange={handleFirst} />
+              <input type="text" value={num1} onChange={handleFirst} />
             </td>
           </tr>
           <tr>
-            <td>Luku2:</td>
+            <td>Luku 2:</td>
             <td>
-              <input type="text" value={luku2} onChange={handleSecond} />
+              <input type="text" value={num2} onChange={handleSecond} />
             </td>
           </tr>
           <tr>
             <td>Tulos:</td>
             <td>
-              <input type="text" readOnly value={tulos} />
+              <input type="text" readOnly value={result} />
             </td>
           </tr>
         </tbody>
@@ -30,22 +30,22 @@ const Calculator = ({ luku1, luku2, tulos, handleFirst, handleSecond }) => {
 };
 
 const App = () => {
-  const [luku1, setLuku1] = useState('');
-  const [luku2, setLuku2] = useState('');
-  const [tulos, setTulos] = useState('');
+  const [num1, setNum1] = useState('');
+  const [num2, setNum2] = useState('');
+  const [result, setResult] = useState('');
 
   useEffect(() => {
-    luku1 > 0 && luku2 > 0
-      ? setTulos(Number(luku1) + Number(luku2))
-      : setTulos(0);
-  }, [luku1, luku2]);
+    num1 > 0 && num2 > 0
+      ? setResult(Number(num1) + Number(num2))
+      : setResult(0);
+  }, [num1, num2]);
 
   const handleFirstNumber = (e) => {
-    setLuku1(e.target.value);
+    setNum1(e.target.value);
   };
 
   const handleSecondNumber = (e) => {
-    setLuku2(e.target.value);
+    setNum2(e.target.value);
   };
 
   return (
@@ -54,9 +54,9 @@ const App = () => {
         <h1 className="lead-4 text-center mb-4">React yhteenlaskin</h1>
         <div className="d-flex justify-content-center">
           <Calculator
-            luku1={luku1}
-            luku2={luku2}
-            tulos={tulos}
+            num1={num1}
+            num2={num2}
+            result={result}
             handleFirst={handleFirstNumber}
             handleSecond={handleSecondNumber}
           />
