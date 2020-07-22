@@ -44,7 +44,7 @@ const TodoForm = ({ handleSubmit, input, handleChange }) => {
 
 const App = () => {
   const [item, setItem] = useState([
-    'Learn React By Examles',
+    'Learn React By Examples',
     'Have a Nice Day',
   ])
   const [input, setInput] = useState('')
@@ -52,8 +52,8 @@ const App = () => {
   const handleSubmit = (e) => {
     e.preventDefault()
     if (!input) return
-    setInput('')
     setItem(item.concat(input))
+    setInput('')
   }
 
   const handleChange = (e) => {
