@@ -35,7 +35,7 @@ const App = () => {
   const [result, setResult] = useState('');
 
   useEffect(() => {
-    num1 > 0 && num2 > 0
+    !isNaN(num1) && !isNaN(num2)
       ? setResult(Number(num1) + Number(num2))
       : setResult(0);
   }, [num1, num2]);
