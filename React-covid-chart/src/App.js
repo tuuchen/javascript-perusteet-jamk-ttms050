@@ -14,9 +14,11 @@ const App = () => {
 
   const worldChartContainer = useRef(null)
   const [worldChartInstance, setworldChartInstance] = useState(null)
+  const [worldMortality, setWorldMortality] = useState(null)
 
   const countryChartContainer = useRef(null)
   const [countryChartInstance, setcountryChartInstance] = useState(null)
+  const [countryMortality, setCountryMortality] = useState(null)
 
   const [data, setData] = useState(null)
   const [country, setCountry] = useState(null)
@@ -59,27 +61,9 @@ const App = () => {
     e.target[0].value = ''
   }
 
-  const getCountryData = async (country) => {
-    try {
-      const data = await axios.get(`api/data/${country}`)
-
-      const newData = [
-        data.data[0].confirmed,
-        data.data[0].recovered,
-        data.data[0].critical,
-        data.data[0].deaths,
-      ]
-
-      setCountry(country)
-      updateCountryChart(0, newData)
-    } catch (err) {
-      console.log('error ', err.response)
-      setCountry(`No data found from "${country}"`)
-    }
-  }
-
   const getWorldData = async () => {
     const data = await axios.get(`api/totals`)
+    // const data = await axios.get(`http://localhost:3001/api/totals`)
 
     const newData = [
       data.data[0].confirmed,
@@ -88,7 +72,39 @@ const App = () => {
       data.data[0].deaths,
     ]
 
+    const mortality = `${(
+      (data.data[0].deaths / data.data[0].confirmed) *
+      100
+    ).toFixed(2)}%`
+    setWorldMortality(mortality)
     setData(newData)
+  }
+
+  const getCountryData = async (country) => {
+    try {
+      country = country.charAt(0).toUpperCase() + country.slice(1).toLowerCase()
+      const data = await axios.get(`api/data/${country}`)
+      // const data = await axios.get(`http://localhost:3001/api/data/${country}`)
+
+      const newData = [
+        data.data[0].confirmed,
+        data.data[0].recovered,
+        data.data[0].critical,
+        data.data[0].deaths,
+      ]
+
+      const mortality = `${(
+        (data.data[0].deaths / data.data[0].confirmed) *
+        100
+      ).toFixed(2)}%`
+      setCountryMortality(mortality)
+      setCountry(country)
+      updateCountryChart(0, newData)
+    } catch (err) {
+      console.log('error ', err.response)
+      alert(`No data found for "${country}"`)
+      //setCountry(`No data found for "${country}"`)
+    }
   }
 
   const updateWorldChart = (datasetIndex, newData) => {
@@ -111,13 +127,21 @@ const App = () => {
         <Tab eventKey="world" title="World">
           <div className="jumbotron mt-4">
             <ChartBanner text="World Covid-19 data" />
-            <Chart country="" chartContainer={worldChartContainer} />
+            <Chart
+              mortality={worldMortality}
+              country=""
+              chartContainer={worldChartContainer}
+            />
           </div>
         </Tab>
         <Tab eventKey="countries" title="Countries">
           <div className="jumbotron mt-4">
             <ChartForm handleSubmit={handleSubmit} input={input} />
-            <Chart country={country} chartContainer={countryChartContainer} />
+            <Chart
+              mortality={countryMortality}
+              country={country}
+              chartContainer={countryChartContainer}
+            />
           </div>
         </Tab>
       </Tabs>
