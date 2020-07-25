@@ -1,0 +1,8 @@
+.close {
+  color: red !important;
+  float: right;
+}
+
+.limit {
+  overflow-wrap: break-word;
+}
