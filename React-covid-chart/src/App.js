@@ -63,7 +63,6 @@ const App = () => {
 
   const getWorldData = async () => {
     const data = await axios.get(`api/totals`)
-    // const data = await axios.get(`http://localhost:3001/api/totals`)
 
     const newData = [
       data.data[0].confirmed,
@@ -84,7 +83,6 @@ const App = () => {
     try {
       country = country.charAt(0).toUpperCase() + country.slice(1).toLowerCase()
       const data = await axios.get(`api/data/${country}`)
-      // const data = await axios.get(`http://localhost:3001/api/data/${country}`)
 
       const newData = [
         data.data[0].confirmed,
@@ -93,17 +91,21 @@ const App = () => {
         data.data[0].deaths,
       ]
 
-      const mortality = `${(
+      const calculatedMortality = (
         (data.data[0].deaths / data.data[0].confirmed) *
         100
-      ).toFixed(2)}%`
+      ).toFixed(2)
+
+      const mortality = `${
+        isNaN(calculatedMortality) ? 0 : calculatedMortality
+      }%`
+
       setCountryMortality(mortality)
       setCountry(country)
       updateCountryChart(0, newData)
     } catch (err) {
       console.log('error ', err.response)
       alert(`No data found for "${country}"`)
-      //setCountry(`No data found for "${country}"`)
     }
   }
 
