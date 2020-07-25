@@ -10,15 +10,25 @@ import Chartjs from 'chart.js'
 import { worldChart, countryChart } from './utils/chartConfig'
 
 const App = () => {
-  const [input, setInput] = useState('')
-
   const worldChartContainer = useRef(null)
   const [worldChartInstance, setworldChartInstance] = useState(null)
   const [worldMortality, setWorldMortality] = useState(null)
+  const [worldData, setWorldData] = useState({
+    confirmed: null,
+    recovered: null,
+    critical: null,
+    deaths: null,
+  })
 
   const countryChartContainer = useRef(null)
   const [countryChartInstance, setcountryChartInstance] = useState(null)
   const [countryMortality, setCountryMortality] = useState(null)
+  const [countryData, setCountrydData] = useState({
+    confirmed: null,
+    recovered: null,
+    critical: null,
+    deaths: null,
+  })
 
   const [data, setData] = useState(null)
   const [country, setCountry] = useState(null)
@@ -56,23 +66,29 @@ const App = () => {
   const handleSubmit = (e) => {
     e.preventDefault()
     if (!e.target[0].value) return
-    setInput(e.target[0].value)
     getCountryData(e.target[0].value)
     e.target[0].value = ''
   }
 
   const getWorldData = async () => {
-    const data = await axios.get(`api/totals`)
+    const result = await axios.get(`api/totals`)
 
     const newData = [
-      data.data[0].confirmed,
-      data.data[0].recovered,
-      data.data[0].critical,
-      data.data[0].deaths,
+      result.data[0].confirmed,
+      result.data[0].recovered,
+      result.data[0].critical,
+      result.data[0].deaths,
     ]
 
+    setWorldData({
+      confirmed: result.data[0].confirmed,
+      recovered: result.data[0].recovered,
+      critical: result.data[0].critical,
+      deaths: result.data[0].deaths,
+    })
+
     const mortality = `${(
-      (data.data[0].deaths / data.data[0].confirmed) *
+      (result.data[0].deaths / result.data[0].confirmed) *
       100
     ).toFixed(2)}%`
     setWorldMortality(mortality)
@@ -82,17 +98,24 @@ const App = () => {
   const getCountryData = async (country) => {
     try {
       country = country.charAt(0).toUpperCase() + country.slice(1).toLowerCase()
-      const data = await axios.get(`api/data/${country}`)
+      const result = await axios.get(`api/data/${country}`)
 
       const newData = [
-        data.data[0].confirmed,
-        data.data[0].recovered,
-        data.data[0].critical,
-        data.data[0].deaths,
+        result.data[0].confirmed,
+        result.data[0].recovered,
+        result.data[0].critical,
+        result.data[0].deaths,
       ]
 
+      setCountrydData({
+        confirmed: result.data[0].confirmed,
+        recovered: result.data[0].recovered,
+        critical: result.data[0].critical,
+        deaths: result.data[0].deaths,
+      })
+
       const calculatedMortality = (
-        (data.data[0].deaths / data.data[0].confirmed) *
+        (result.data[0].deaths / result.data[0].confirmed) *
         100
       ).toFixed(2)
 
@@ -130,6 +153,10 @@ const App = () => {
           <div className="jumbotron mt-4">
             <ChartBanner text="World Covid-19 data" />
             <Chart
+              confirmed={worldData.confirmed}
+              recovered={worldData.recovered}
+              critical={worldData.critical}
+              deaths={worldData.deaths}
               mortality={worldMortality}
               country=""
               chartContainer={worldChartContainer}
@@ -138,8 +165,12 @@ const App = () => {
         </Tab>
         <Tab eventKey="countries" title="Countries">
           <div className="jumbotron mt-4">
-            <ChartForm handleSubmit={handleSubmit} input={input} />
+            <ChartForm handleSubmit={handleSubmit} />
             <Chart
+              confirmed={countryData.confirmed}
+              recovered={countryData.recovered}
+              critical={countryData.critical}
+              deaths={countryData.deaths}
               mortality={countryMortality}
               country={country}
               chartContainer={countryChartContainer}
