@@ -5,15 +5,10 @@ $(() => {
       if (!countries) {
         countries = await $.get('api/countries')
         countries = countries.map((x) => x.name)
-        response(sortCountries(request, countries))
-      } else {
-        response(sortCountries(request, countries))
       }
+      const re = $.ui.autocomplete.escapeRegex(request.term)
+      const matcher = new RegExp('^' + re, 'i')
+      response($.grep(countries, (item, index) => matcher.test(item)))
     },
   })
-  const sortCountries = (request, array) => {
-    var re = $.ui.autocomplete.escapeRegex(request.term)
-    var matcher = new RegExp('^' + re, 'i')
-    return $.grep(array, (item, index) => matcher.test(item))
-  }
 })
