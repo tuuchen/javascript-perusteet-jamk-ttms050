@@ -1,19 +1,19 @@
 $(() => {
+  let countries = null
   $('#myInput').autocomplete({
-    source: (request, response) => {
-      $.ajax({
-        url: 'api/countries',
-        success: (data) => {
-          const countries = data.map((x) => x.name)
-          countries ? countries : null
-          var re = $.ui.autocomplete.escapeRegex(request.term)
-          var matcher = new RegExp('^' + re, 'i')
-          var a = $.grep(countries, (item, index) => {
-            return matcher.test(item)
-          })
-          response(a)
-        },
-      })
+    source: async (request, response) => {
+      if (!countries) {
+        countries = await $.get('api/countries')
+        countries = countries.map((x) => x.name)
+        response(sortCountries(request, countries))
+      } else {
+        response(sortCountries(request, countries))
+      }
     },
   })
+  const sortCountries = (request, array) => {
+    var re = $.ui.autocomplete.escapeRegex(request.term)
+    var matcher = new RegExp('^' + re, 'i')
+    return $.grep(array, (item, index) => matcher.test(item))
+  }
 })
