@@ -13,22 +13,10 @@ const App = () => {
   const worldChartContainer = useRef(null)
   const [worldChartInstance, setworldChartInstance] = useState(null)
   const [worldMortality, setWorldMortality] = useState(null)
-  const [worldData, setWorldData] = useState({
-    confirmed: null,
-    recovered: null,
-    critical: null,
-    deaths: null,
-  })
 
   const countryChartContainer = useRef(null)
   const [countryChartInstance, setcountryChartInstance] = useState(null)
   const [countryMortality, setCountryMortality] = useState(null)
-  const [countryData, setCountrydData] = useState({
-    confirmed: null,
-    recovered: null,
-    critical: null,
-    deaths: null,
-  })
 
   const [data, setData] = useState(null)
   const [country, setCountry] = useState(null)
@@ -80,13 +68,6 @@ const App = () => {
       result.data[0].deaths,
     ]
 
-    setWorldData({
-      confirmed: result.data[0].confirmed,
-      recovered: result.data[0].recovered,
-      critical: result.data[0].critical,
-      deaths: result.data[0].deaths,
-    })
-
     const mortality = `${(
       (result.data[0].deaths / result.data[0].confirmed) *
       100
@@ -107,13 +88,6 @@ const App = () => {
         result.data[0].deaths,
       ]
 
-      setCountrydData({
-        confirmed: result.data[0].confirmed,
-        recovered: result.data[0].recovered,
-        critical: result.data[0].critical,
-        deaths: result.data[0].deaths,
-      })
-
       const calculatedMortality = (
         (result.data[0].deaths / result.data[0].confirmed) *
         100
@@ -133,12 +107,28 @@ const App = () => {
   }
 
   const updateWorldChart = (datasetIndex, newData) => {
+    const labels = [
+      'Confirmed ' + newData[0],
+      'Recovered ' + newData[1],
+      'Critical ' + newData[2],
+      'Deaths ' + newData[3],
+    ]
+
     worldChartInstance.data.datasets[datasetIndex].data = newData
+    worldChartInstance.data.labels = labels
     worldChartInstance.update()
   }
 
   const updateCountryChart = (datasetIndex, newData) => {
+    const labels = [
+      'Confirmed ' + newData[0],
+      'Recovered ' + newData[1],
+      'Critical ' + newData[2],
+      'Deaths ' + newData[3],
+    ]
+
     countryChartInstance.data.datasets[datasetIndex].data = newData
+    countryChartInstance.data.labels = labels
     countryChartInstance.update()
   }
 
@@ -153,10 +143,6 @@ const App = () => {
           <div className="jumbotron mt-4">
             <ChartBanner text="World Covid-19 data" />
             <Chart
-              confirmed={worldData.confirmed}
-              recovered={worldData.recovered}
-              critical={worldData.critical}
-              deaths={worldData.deaths}
               mortality={worldMortality}
               country=""
               chartContainer={worldChartContainer}
@@ -167,10 +153,6 @@ const App = () => {
           <div className="jumbotron mt-4">
             <ChartForm handleSubmit={handleSubmit} />
             <Chart
-              confirmed={countryData.confirmed}
-              recovered={countryData.recovered}
-              critical={countryData.critical}
-              deaths={countryData.deaths}
               mortality={countryMortality}
               country={country}
               chartContainer={countryChartContainer}

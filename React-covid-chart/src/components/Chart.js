@@ -1,15 +1,6 @@
 import React from 'react'
-import Statistics from './Statistics'
 
-const Chart = ({
-  chartContainer,
-  country,
-  mortality,
-  confirmed,
-  recovered,
-  critical,
-  deaths,
-}) => {
+const Chart = ({ chartContainer, country, mortality }) => {
   let styleObject
   country === null
     ? (styleObject = { display: 'none' })
@@ -17,14 +8,16 @@ const Chart = ({
 
   return (
     <div style={styleObject}>
-      <Statistics
-        country={country}
-        mortality={mortality}
-        confirmed={confirmed}
-        recovered={recovered}
-        critical={critical}
-        deaths={deaths}
-      />
+      <div className="row mb-2">
+        <div className="col">
+          <h5 className="form-text text-muted text-center">{country}</h5>
+        </div>
+        <div className="col">
+          <h6 className="form-text text-muted text-center">
+            Mortality {mortality}
+          </h6>
+        </div>
+      </div>
       <canvas ref={chartContainer} />
     </div>
   )
