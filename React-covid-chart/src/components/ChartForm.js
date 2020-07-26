@@ -8,7 +8,7 @@ const ChartForm = ({ handleSubmit }) => {
       </small>
       <div className="input-group">
         <input
-          id="myInput"
+          id="country-form"
           type="text"
           className="form-control"
           placeholder="Start typing.."
