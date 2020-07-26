@@ -1,13 +1,16 @@
 import React from 'react'
 import { useState, useEffect, useRef } from 'react'
-import Tabs from 'react-bootstrap/Tabs'
-import Tab from 'react-bootstrap/Tab'
+import { worldChart, countryChart } from './utils/chartConfig'
+import axios from 'axios'
+import Chartjs from 'chart.js'
 import ChartBanner from './components/ChartBanner'
 import ChartForm from './components/ChartForm'
-import axios from 'axios'
 import Chart from './components/Chart'
-import Chartjs from 'chart.js'
-import { worldChart, countryChart } from './utils/chartConfig'
+import Container from 'react-bootstrap/Container'
+import ErrorModal from './components/ErrorModal'
+import Jumbotron from 'react-bootstrap/Jumbotron'
+import Tabs from 'react-bootstrap/Tabs'
+import Tab from 'react-bootstrap/Tab'
 
 const App = () => {
   const worldChartContainer = useRef(null)
@@ -20,6 +23,9 @@ const App = () => {
 
   const [data, setData] = useState(null)
   const [country, setCountry] = useState(null)
+
+  const [show, setShow] = useState(false)
+  const [error, setError] = useState(null)
 
   useEffect(() => {
     if (worldChartContainer && worldChartContainer.current) {
@@ -102,7 +108,7 @@ const App = () => {
       updateCountryChart(0, newData)
     } catch (err) {
       console.log('error ', err.response)
-      alert(`No data found for "${country}"`)
+      showErrorModal(`No data found for "${country}"`)
     }
   }
 
@@ -132,35 +138,47 @@ const App = () => {
     countryChartInstance.update()
   }
 
+  const handleClose = () => setShow(false)
+
+  const showErrorModal = (error) => {
+    setError(error)
+    setShow(true)
+    setTimeout(() => {
+      setShow(false)
+      setError(null)
+    }, 4000)
+  }
+
   return (
-    <div className="container mt-4">
+    <Container className="mt-4">
+      <ErrorModal error={error} show={show} handleClose={handleClose} />
       <Tabs
         fill
         className="mb-5 justify-content-center"
         defaultActiveKey="world"
       >
         <Tab eventKey="world" title="World">
-          <div className="jumbotron mt-4">
+          <Jumbotron className="mt-4">
             <ChartBanner text="World Covid-19 data" />
             <Chart
               mortality={worldMortality}
               country=""
               chartContainer={worldChartContainer}
             />
-          </div>
+          </Jumbotron>
         </Tab>
         <Tab eventKey="countries" title="Countries">
-          <div className="jumbotron mt-4">
+          <Jumbotron className="jumbotron mt-4">
             <ChartForm handleSubmit={handleSubmit} />
             <Chart
               mortality={countryMortality}
               country={country}
               chartContainer={countryChartContainer}
             />
-          </div>
+          </Jumbotron>
         </Tab>
       </Tabs>
-    </div>
+    </Container>
   )
 }
 
