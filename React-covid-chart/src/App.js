@@ -67,12 +67,12 @@ const App = () => {
   const getWorldData = async () => {
     const result = await axios.get(`api/totals`)
 
-    const newChartData = [
-      result.data[0].confirmed,
-      result.data[0].recovered,
-      result.data[0].critical,
-      result.data[0].deaths,
-    ]
+    const newChartData = {
+      confirmed: result.data[0].confirmed,
+      recovered: result.data[0].recovered,
+      critical: result.data[0].critical,
+      deaths: result.data[0].deaths,
+    }
 
     const mortality = `${(
       (result.data[0].deaths / result.data[0].confirmed) *
@@ -87,12 +87,12 @@ const App = () => {
       country = country.charAt(0).toUpperCase() + country.slice(1).toLowerCase()
       const result = await axios.get(`api/data/${country}`)
 
-      const newChartData = [
-        result.data[0].confirmed,
-        result.data[0].recovered,
-        result.data[0].critical,
-        result.data[0].deaths,
-      ]
+      const newChartData = {
+        confirmed: result.data[0].confirmed,
+        recovered: result.data[0].recovered,
+        critical: result.data[0].critical,
+        deaths: result.data[0].deaths,
+      }
 
       const calculatedMortality = (
         (result.data[0].deaths / result.data[0].confirmed) *
@@ -114,26 +114,28 @@ const App = () => {
 
   const updateWorldChart = (datasetIndex, newData) => {
     const labels = [
-      'Confirmed ' + newData[0],
-      'Recovered ' + newData[1],
-      'Critical ' + newData[2],
-      'Deaths ' + newData[3],
+      'Confirmed ' + newData.confirmed,
+      'Recovered ' + newData.recovered,
+      'Critical ' + newData.critical,
+      'Deaths ' + newData.deaths,
     ]
 
-    worldChartInstance.data.datasets[datasetIndex].data = newData
+    const arrayOfData = Object.keys(newData).map((i) => newData[i])
+    worldChartInstance.data.datasets[datasetIndex].data = arrayOfData
     worldChartInstance.data.labels = labels
     worldChartInstance.update()
   }
 
   const updateCountryChart = (datasetIndex, newData) => {
     const labels = [
-      'Confirmed ' + newData[0],
-      'Recovered ' + newData[1],
-      'Critical ' + newData[2],
-      'Deaths ' + newData[3],
+      'Confirmed ' + newData.confirmed,
+      'Recovered ' + newData.recovered,
+      'Critical ' + newData.critical,
+      'Deaths ' + newData.deaths,
     ]
 
-    countryChartInstance.data.datasets[datasetIndex].data = newData
+    const arrayOfData = Object.keys(newData).map((i) => newData[i])
+    countryChartInstance.data.datasets[datasetIndex].data = arrayOfData
     countryChartInstance.data.labels = labels
     countryChartInstance.update()
   }
