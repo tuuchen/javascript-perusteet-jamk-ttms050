@@ -1,6 +1,6 @@
 # Harjoitustyö, Web-ohjelmointi TTMS0500 (Kesä 2020)
 
-## Koronatilastot Reactilla, Bootstrapilla, Expressillä sekä Chart.js:llä.
+## Koronatilastot Reactilla sekä Chart.js:llä.
 
 07.08.2020
 
@@ -14,7 +14,9 @@
 
 ## Sovellus
 
-Sovellus on toteutettu uudella Reactilla (16.8+), Bootstrapilla, Expressillä sekä Chart.js:llä. Frontendissä tehdään ajax kutsuja omaan express-backendin, jossa varsinaiset API-kutsut tapahtuvat.
+Sovellus on toteutettu ei-luokkapohjaisella Reactilla (16.8+), Bootstrapilla, Expressillä, Axioksella, sekä Chart.js:llä. Frontendissä tehdään ajax kutsuja omaan express-backendin, jossa varsinaiset API-kutsut tapahtuvat ja palautuvat frontendiin. 
+
+Työ sai inspiraation harjoituksessa käytetyn Chart.js:n kautta, ja jäin pohtimaan miten yhdistää Chart.js uuteen, ei-luokkapohjaiseen Reactiin. Halusin käyttää sovelluksen datana API:a, josta saa numeraalista dataa kaavioden käyttöön, ja koronatilastojen hyödyntäminen vaikutti ajankohtaiselta. Sovelluksen datana on käytetty [COVID-19 data API:a.](https://rapidapi.com/Gramzivi/api/covid-19-data?endpoint=apiendpoint_35f69513-ea31-48fd-a97d-4e2c8165d0b3) 
 
 ---
 
@@ -437,69 +439,43 @@ Lisää Bootstrapin tyylikirjastosta voi lukea [Bootstrapin omasta dokumentaatio
 
 ## Käytettävissä olevat skriptit
 
-Projektin juuressa voit:
+Huom! Projekti vaatii API-kutsuja varten toimivan API-avaimen, jonka [saa täältä.](https://rapidapi.com/Gramzivi/api/covid-19-data?endpoint=apiendpoint_35f69513-ea31-48fd-a97d-4e2c8165d0b3)
 
-### `npm start`
+API-avain syötetään server.js -tiedostoon headers -objektiin.
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+```
+const headers = {
+  'content-type': 'application/octet-stream',
+  'x-rapidapi-host': 'covid-19-data.p.rapidapi.com',
+  'x-rapidapi-key': *TÄHÄN SINUN API-AVAIN*
+  useQueryString: true,
+}
+```
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
 
-### `npm test`
+### Projektin käynnistys:
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### `npm install`
+
+Asentaa vaaditut modulit.
+
+### `npm run dev`
+
+Käynnistää Nodemonin avulla express serverin API -kutsuja varten.
+
+### `npm run serve`
+
+Käynnistää sovelluksen frontendin osoitteessa [http://localhost:3000](http://localhost:3000)
 
 ### `npm run build`
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject` , you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject` . The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+Kasaa projektin julkaisua varten.
 
 ---
+## Yhteenveto, ajankäyttö, itsearviointi
 
-## Luettavaa:
+Kaavioiden yhdistäminen ei-luokkapohjaiseen Reactiin, sekä kaavioiden tilanhallinta oli aluksi haastavaa ja vaati opettelua. Työssä piti soveltaa osaamista ja ongelmanratkaisua, sillä käytin React-versiota, jota ei kurssilla opetettu. Olen kuitenkin tyytyväinen lopputulokseen sekä pienimuotoisen express serverin hyödyntämiseen API-kutsuja varten. 
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Pyrin sivuston ulkoasussa painottamaan erityisesti siistiin ja neutraaliin ilmeeseen. Reactin modulaarisuuden vuoksi työtä on helppo jatkaa eteenpäin esimerkiksi lisäämäällä kolmas välilehti, jossa voi käyttää toisenlaisia kaavioita pylväskaavioiden sijaan, tai lisäämällä komponentteja sekä niiden toiminnallisuuksia. Myös backendin funktiot ja reitit voi edelleen pilkkoa omiksi moduuleiksi, ja lisätä joukkoon muutama testi.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+Käytin työhön loppudokumentaatio mukaan lukien noin 30-tuntia. Annan itselleni ja työlle arvosanaksi 4, sillä sovelsin työssä myös kurssin ulkopuolisia tekniikoita. Viitosen arvosana varten laajentaisin sovellusta, ja mahdollistaisin käyttäjälle valintoja erilaisten kaavoiden valintaan, esimerkiksi kaavion tyyppien vaihteluun. Viitosen arvosanaa varten rakentaisin mahdollisesti myös täysin oman backendin hyödyntäen MongoDB:tä.
