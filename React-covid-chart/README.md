@@ -14,7 +14,7 @@
 
 ## Sovellus
 
-Sovellus on toteutettu uudella Reactilla (16.8+), Bootstrapilla, Expressillä sekä Chart.js:llä. Frontendissä tehdään ajax kutsuja omaan express-backendin, jossa varsinaiset API-kutsut tapahtuvat, ja sovelluksen API-avain on piilotettu .env tiedostoon, sekä Herokun config variableksi.
+Sovellus on toteutettu uudella Reactilla (16.8+), Bootstrapilla, Expressillä sekä Chart.js:llä. Frontendissä tehdään ajax kutsuja omaan express-backendin, jossa varsinaiset API-kutsut tapahtuvat.
 
 ---
 
@@ -36,7 +36,7 @@ Maat -välilehden kautta käyttäjä voi hakea maakohtaista dataa. Maakohtainen 
 
 ## Hakuehtojen automaattinen täydennys
 
-[![Maakohtainen haku](https://i.imgur.com/7b7ofw7.png)](https://i.imgur.com/7b7ofw7.png)
+[![Autocomplete](https://i.imgur.com/7b7ofw7.png)](https://i.imgur.com/7b7ofw7.png)
 
 ---
 
@@ -270,7 +270,7 @@ const ChartForm = ({ handleSubmit }) => {
   }
 ```
 
- `getCountryData` -funktio lähettää axios-kirjaston avulla ajax-kutsun backendiin osoitteeseen `api/data/[maa]`, ja backendin palauttamasta vastauksesta muodostetaan olio, joka sisältää kaaviota varten halutun datan. Uusi olio annetaan parametrinä eteenpäin kartan piirtävään funktioon. Funktiossa on käytetty uudempaa async/await, sekä try/catch ohjelmointityyliä promisejen sijaan. Mikäli backend vastaa kutsuun virheellä, siirrytään catch -lohkoon, ja esitetään käyttäjälle ilmoitus hyödyntäen Bootsrapin modal-komponenttia. 
+`getCountryData` -funktio lähettää axios-kirjaston avulla ajax-kutsun backendiin osoitteeseen `api/data/[maa]` , ja backendin palauttamasta vastauksesta muodostetaan olio, joka sisältää kaaviota varten halutun datan. Uusi olio annetaan parametrinä eteenpäin kartan piirtävään funktioon. Funktiossa on käytetty uudempaa async/await, sekä try/catch ohjelmointityyliä promisejen sijaan. Mikäli backend vastaa kutsuun virheellä, siirrytään catch -lohkoon, ja esitetään käyttäjälle ilmoitus hyödyntäen Bootsrapin modal-komponenttia. 
 
 ``` 
   const getCountryData = async (country) => {
@@ -291,7 +291,7 @@ const ChartForm = ({ handleSubmit }) => {
   }
   ```
 
-Kartan päivityksestä vastaava funktio saa parametrina datan indeksin, sekä uuden datan. Halusin omassa sovelluksessani, että myös nimikylteissä näkyy kaavion arvot, joten muokkaan myös nimikylttejä vastaamaan uutta dataa. Objekti on kuitenkin muutettava taulukoksi ennen kuin data voidaan päivittää. Käytän ratkaisussani Object.keys().map -funktiota, joka hakee objektin arvot viitaten indeksiin, ja rakentaa niistä taulukon. Lopulta kaavio päivitetään funktiolla `countryChartInstance.update()`.
+Kartan päivityksestä vastaava funktio saa parametrina datan indeksin, sekä uuden datan. Halusin omassa sovelluksessani, että myös nimikylteissä näkyy kaavion arvot, joten muokkaan myös nimikylttejä vastaamaan uutta dataa. Objekti on kuitenkin muutettava taulukoksi ennen kuin data voidaan päivittää. Käytän ratkaisussani Object.keys().map -funktiota, joka hakee objektin arvot viitaten indeksiin, ja rakentaa niistä taulukon. Lopulta kaavio päivitetään funktiolla `countryChartInstance.update()` .
 
 ``` 
   const updateCountryChart = (datasetIndex, newData) => {
@@ -313,7 +313,7 @@ Kartan päivityksestä vastaava funktio saa parametrina datan indeksin, sekä uu
 
  ## Karttatietojen päivitys, backend
 
- Ajax-kutsun saapuessa frontendistä express serverin osoitteeseen `/api/data/`, lukee funktio frontendistä tulevan reittiparametrin `:country` arvon. Express välittää reittiparametrin arvon funktiolle `getLatestCountryDataByName`, joka edelleen käsittelee ajax-kutsun API:n tarjoajalle, ja jää odottamaan vastausta. Mikäli vastauksen pituus ei ole nolla, välitetään data takaisin frontendin käsiteltäväksi, muutoin palautetaan HTTP virheilmoitus 400, Bad Request, ja frontendissä siirrytään catch -lohkoon. 
+ Ajax-kutsun saapuessa frontendistä express serverin osoitteeseen `/api/data/` , lukee funktio frontendistä tulevan reittiparametrin `:country` arvon. Express välittää reittiparametrin arvon funktiolle `getLatestCountryDataByName` , joka edelleen käsittelee ajax-kutsun API:n tarjoajalle, ja jää odottamaan vastausta. Mikäli vastauksen pituus ei ole nolla, välitetään data takaisin frontendin käsiteltäväksi, muutoin palautetaan HTTP virheilmoitus 400, Bad Request, ja frontendissä siirrytään catch -lohkoon. 
 
 ``` 
  app.get('/api/data/:country', async (req, res) => {
@@ -340,7 +340,7 @@ const getLatestCountryDataByName = async (countryName) => {
 }
 ```
 
-Ajax -kutsun headeriin on annettu viittaus API-avaimeen, `process.env.API_KEY`, joka sijaitsee palvelimella. 
+Ajax -kutsun headeriin on annettu viittaus API-avaimeen, `process.env.API_KEY` , joka sijaitsee palvelimella. 
 
 ``` 
 const headers = {
@@ -351,16 +351,93 @@ const headers = {
 }
 ```
 
+---
+
+ ## Sovelluksen tyylit
+
+Sovellus on toteutettu responsiivista tyylikirjastoa, [Bootstrapia, ](https://getbootstrap.com/) sekä [Bootstrap for React](https://react-bootstrap.github.io/getting-started/introduction/) -hyödyntäen, ja skaalautuu erikokoisille näytöille.
+
+React Boostrapin asennus käy kätevimmin npm:n avulla `npm install react-bootstrap bootstrap` , jolloin sovelluksen käyttöön tulee Bootsrapin valmiita komponentteja. 
+
+App -komponentti on rakennettu Reactin Boostrapilla. Bootstrapin komponentit tuodaan haluttuun komponenttiin import-lauseella, kuten muutkin komponetit. 
+
+``` 
+import Container from 'react-bootstrap/Container'
+import Jumbotron from 'react-bootstrap/Jumbotron'
+import Tabs from 'react-bootstrap/Tabs'
+import Tab from 'react-bootstrap/Tab'
+
+  return (
+    <Container>
+      <Tabs defaultActiveKey="world" >
+        <Tab eventKey="world" title="World">
+          <Jumbotron>
+                // Tähän omia komponentteja ensimmäiselle välilehdelle
+          </Jumbotron>
+        </Tab>
+        <Tab eventKey="countries" title="Countries">
+          <Jumbotron>
+                // Tähän omia komponentteja toiselle välilehdelle
+          </Jumbotron>
+        </Tab>
+      </Tabs>
+    </Container>
+  )
+  ```
+
+Ylläoleva koodi havainnollisettuna alempana. Omat komponentit ovat kääritty Container -komponenttiin, jonka sisällä on Tabs sekä Tab -komponentit. Näiden sisällä on käytetty Jumbotron -komponenttia, joka käärii sen sisälle tulevat komponentit harmaaseen Jumbotron -taustaan. 
+
+[![Autocomplete](https://i.imgur.com/71COGGD.png)](https://i.imgur.com/71COGGD.png)
+
+Bootstrapia voi käyttää myös perinteiseen HTML-tyyliin, lisäämäällä index.html `<head>` -tagiin Bootstrapin tyylit, sekä Bootstrapin vaatiman jQueryn. 
+
+``` 
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css..." >
+
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js..."></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js..."></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js..."></script>
+
+```
+
+Tällöin Bootstrapia kirjoitetaan suoraan `<div>` -elementtien tyyleihin, eikä Bootsrapin komponentteja tarvitse importtailla.  
+
+Esimerkki Chart -komponentista, jossa Bootstrapia on käytetty on suoraan div elementeissä. Esimerkissä `row mb-2`, `col`, sekä `form-text text-muted text-center` ovat Bootsrapin valmiita tyylejä: 
+
+```
+const Chart = ({ chartContainer, countryName, mortality }) => {
+
+  return (
+    <div>
+      <div className="row mb-2">
+        <div className="col">
+          <h5 className="form-text text-muted text-center">{countryName}</h5>
+        </div>
+        <div className="col">
+          <h6 className="form-text text-muted text-center">
+            Mortality {mortality}
+          </h6>
+        </div>
+      </div>
+      <canvas ref={chartContainer} />
+    </div>
+  )
+}
+```
+Huomionarvoista on se, ettei Reactin tyyleissä tule käyttää määritelmää `class`, vaan `className`. 
+
+Lisää Bootstrapin tyylikirjastosta voi lukea [Bootstrapin omasta dokumentaatiosta.](https://getbootstrap.com/docs/4.5/getting-started/introduction/)
 
 
 
 
+---
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Käytettävissä olevat skriptit
 
-## Available Scripts
-
-In the project directory, you can run:
+Projektin juuressa voit:
 
 ### `npm start`
 
@@ -395,7 +472,9 @@ Instead, it will copy all the configuration files and the transitive dependencie
 
 You don’t have to ever use `eject` . The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
-## Learn More
+---
+
+## Luettavaa:
 
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
