@@ -1,8 +1,8 @@
 import React from 'react'
 
-const Chart = ({ chartContainer, country, mortality }) => {
+const Chart = ({ chartContainer, countryName, mortality }) => {
   let styleObject
-  country === null
+  countryName === null
     ? (styleObject = { display: 'none' })
     : (styleObject = { display: 'block' })
 
@@ -10,7 +10,7 @@ const Chart = ({ chartContainer, country, mortality }) => {
     <div style={styleObject}>
       <div className="row mb-2">
         <div className="col">
-          <h5 className="form-text text-muted text-center">{country}</h5>
+          <h5 className="form-text text-muted text-center">{countryName}</h5>
         </div>
         <div className="col">
           <h6 className="form-text text-muted text-center">

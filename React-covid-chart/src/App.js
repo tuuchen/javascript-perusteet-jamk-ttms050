@@ -6,8 +6,8 @@ import Chartjs from 'chart.js'
 import ChartBanner from './components/ChartBanner'
 import ChartForm from './components/ChartForm'
 import Chart from './components/Chart'
+import ChartModal from './components/ChartModal'
 import Container from 'react-bootstrap/Container'
-import ErrorModal from './components/ErrorModal'
 import Jumbotron from 'react-bootstrap/Jumbotron'
 import Tabs from 'react-bootstrap/Tabs'
 import Tab from 'react-bootstrap/Tab'
@@ -21,11 +21,11 @@ const App = () => {
   const [countryChartInstance, setcountryChartInstance] = useState(null)
   const [countryMortality, setCountryMortality] = useState(null)
 
-  const [data, setData] = useState(null)
-  const [country, setCountry] = useState(null)
+  const [chartData, setChartData] = useState(null)
+  const [countryName, setCountryName] = useState(null)
 
-  const [show, setShow] = useState(false)
-  const [error, setError] = useState(null)
+  const [showModal, setShowModal] = useState(false)
+  const [modalMessage, setModalMessage] = useState(null)
 
   useEffect(() => {
     if (worldChartContainer && worldChartContainer.current) {
@@ -52,10 +52,10 @@ const App = () => {
   }, [])
 
   useEffect(() => {
-    if (data) {
-      updateWorldChart(0, data)
+    if (chartData) {
+      updateWorldChart(0, chartData)
     }
-  }, [data])
+  }, [chartData])
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -67,7 +67,7 @@ const App = () => {
   const getWorldData = async () => {
     const result = await axios.get(`api/totals`)
 
-    const newData = [
+    const newChartData = [
       result.data[0].confirmed,
       result.data[0].recovered,
       result.data[0].critical,
@@ -79,7 +79,7 @@ const App = () => {
       100
     ).toFixed(2)}%`
     setWorldMortality(mortality)
-    setData(newData)
+    setChartData(newChartData)
   }
 
   const getCountryData = async (country) => {
@@ -87,7 +87,7 @@ const App = () => {
       country = country.charAt(0).toUpperCase() + country.slice(1).toLowerCase()
       const result = await axios.get(`api/data/${country}`)
 
-      const newData = [
+      const newChartData = [
         result.data[0].confirmed,
         result.data[0].recovered,
         result.data[0].critical,
@@ -104,11 +104,11 @@ const App = () => {
       }%`
 
       setCountryMortality(mortality)
-      setCountry(country)
-      updateCountryChart(0, newData)
+      setCountryName(country)
+      updateCountryChart(0, newChartData)
     } catch (err) {
       console.log('error ', err.response)
-      showErrorModal(`No data found for "${country}"`)
+      showChartModal(`No data found for "${country}"`)
     }
   }
 
@@ -138,20 +138,25 @@ const App = () => {
     countryChartInstance.update()
   }
 
-  const handleClose = () => setShow(false)
+  const handleClose = () => setShowModal(false)
 
-  const showErrorModal = (error) => {
-    setError(error)
-    setShow(true)
+  const showChartModal = (message) => {
+    setModalMessage(message)
+    setShowModal(true)
     setTimeout(() => {
-      setShow(false)
-      setError(null)
+      setShowModal(false)
+      setModalMessage(null)
     }, 4000)
   }
 
   return (
     <Container className="mt-4">
-      <ErrorModal error={error} show={show} handleClose={handleClose} />
+      <ChartModal
+        title="Whooops!"
+        body={modalMessage}
+        show={showModal}
+        handleClose={handleClose}
+      />
       <Tabs
         fill
         className="mb-5 justify-content-center"
@@ -159,7 +164,7 @@ const App = () => {
       >
         <Tab eventKey="world" title="World">
           <Jumbotron className="mt-4">
-            <ChartBanner text="World Covid-19 data" />
+            <ChartBanner text="World COVID-19 Cases" />
             <Chart
               mortality={worldMortality}
               country=""
@@ -168,11 +173,11 @@ const App = () => {
           </Jumbotron>
         </Tab>
         <Tab eventKey="countries" title="Countries">
-          <Jumbotron className="jumbotron mt-4">
+          <Jumbotron className="mt-4">
             <ChartForm handleSubmit={handleSubmit} />
             <Chart
               mortality={countryMortality}
-              country={country}
+              countryName={countryName}
               chartContainer={countryChartContainer}
             />
           </Jumbotron>

@@ -52,7 +52,7 @@ app.get('/api/totals', async (req, res) => {
 app.get('/api/data/:country', async (req, res) => {
   const country = req.params.country
   const data = await getLatestCountryDataByName(country)
-  res.send(data)
+  data.length === 0 ? res.status(400).send() : res.send(data)
 })
 
 const headers = {
